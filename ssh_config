@@ -1,0 +1,25 @@
+Host *
+  ForwardAgent yes
+  ForwardX11 no
+  ConnectionAttempts 3
+  ConnectTimeout 60
+  TCPKeepAlive yes
+  ServerAliveCountMax 6
+  ServerAliveInterval 30
+  ControlMaster auto
+  ControlPath /tmp/.sshC.%u.%h.%p.%r
+  ControlPersist 1h
+  UserKnownHostsFile /dev/null
+  StrictHostKeyChecking no
+
+Host 172.*
+  User ubuntu
+  IdentityFile /home/varun/aws-3-tier-architecture/configs/dev/dev_deploy_key
+  ProxyCommand ssh -F /home/varun/aws-3-tier-architecture/ssh_config -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -W %h:%p ubuntu@bastion_jump_host
+
+Host bastion_jump_host
+  HostName 13.232.167.11
+  User ubuntu
+  IdentityFile /home/varun/aws-3-tier-architecture/configs/dev/dev_deploy_key
+  ControlPath /tmp/.sshB.%u.%h.%p.%r
+  ProxyCommand none
